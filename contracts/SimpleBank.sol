@@ -14,22 +14,28 @@ contract SimpleBank {
     
     // Fill in the visibility keyword. 
     // Hint: We want to protect our users balance from other contracts
-    mapping (address => uint) balances ;
+    //mapping (address => uint) balances ;
+    mapping (address => uint) internal balances;
     
     // Fill in the visibility keyword
     // Hint: We want to create a getter function and allow contracts to be able
     //       to see if a user is enrolled.
-    mapping (address => bool) enrolled;
+    //mapping (address => bool) enrolled;
+    mapping (address => bool) public enrolled;
 
     // Let's make sure everyone knows who owns the bank, yes, fill in the
     // appropriate visilibility keyword
-    address owner = msg.sender;
+    // address owner = msg.sender;
+    // Added 'public' in front of 'owner'
+    address public owner = msg.sender;
     
     /* Events - publicize actions to external listeners
      */
     
     // Add an argument for this event, an accountAddress
-    event LogEnrolled();
+    //event LogEnrolled();
+    // Added parameters to function
+    event LogEnrolled(address accountAddress);
 
     // Add 2 arguments for this event, an accountAddress and an amount
     event LogDepositMade();
@@ -63,6 +69,9 @@ contract SimpleBank {
     // Emit the appropriate event
     function enroll() public returns (bool){
       // 1. enroll of the sender of this transaction
+      enrolled[msg.sender] = true; // Added
+      emit LogEnrolled(msg.sender); // Added
+      return enrolled[msg.sender];
     }
 
     /// @notice Deposit ether into bank
